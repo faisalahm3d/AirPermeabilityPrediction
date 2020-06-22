@@ -4,9 +4,11 @@ import numpy as np
 import os
 os.environ["PATH"] += os.pathsep + 'C:/Program Files (x86)/Graphviz2.38/bin/'
 from utils_features_selection import *
+from mpl_toolkits import mplot3d
 
 from xgboost import plot_tree
-
+import numpy as np
+import matplotlib.pyplot as plt
 from sklearn import linear_model
 from sklearn.ensemble import RandomForestClassifier,RandomForestRegressor
 from sklearn import svm
@@ -103,8 +105,9 @@ def Compare_with_other_method(sub_cols=['Yarn Count (tex)','Stitch density (loop
     #Figure 4 for si illustrates the problem. If it is 50% off, SI cannot be drawn. Figure 4
     X_train, X_val, y_train, y_val = train_test_split(x_np, Y_data, test_size=0.3, random_state=6)
     Num_iter = 10
-    fig = plt.figure(figsize=(16, 8))
+    #fig = plt.figure(figsize=(16, 8))
     labels_names = []
+
     '''
     #Define the comparison method under full features
     xgb_n_clf = xgb.XGBClassifier(
@@ -157,7 +160,12 @@ def Compare_with_other_method(sub_cols=['Yarn Count (tex)','Stitch density (loop
    # X_train, X_val, y_train, y_val = train_test_split(x_np_sel, y_np, test_size=0.3, random_state=6)
 
     #For comparison of three-feature models
-    xgb_clf = xgb.XGBRegressor(max_depth=3, n_estimators=1,random_state=0)
+    xgb_clf = xgb.XGBRegressor(max_depth=4,
+                learning_rate=0.2,
+                reg_lambda=1,
+                n_estimators=150,
+                subsample = 0.9,
+                colsample_bytree = 0.9)
     tree_clf = tree.DecisionTreeRegressor(random_state=0,max_depth=3)
     RF_clf2 = RandomForestRegressor(random_state=0,n_estimators=1,max_depth=3,)
     #added by me
@@ -193,20 +201,23 @@ def Compare_with_other_method(sub_cols=['Yarn Count (tex)','Stitch density (loop
         print("MSE ",mean_squared_error(y_val,pred_val))
         pred_score = model.score(X_val,y_val)
         print(" R = ", pred_score)
+
+        #plot 3dimensional scatter
+        fig = plt.figure()
+        ax = plt.axes(projection='3d')
+        ax.scatter3D(X_val.values[:,0],X_val.values[:,1], y_val, c=y_val, cmap='Greens')
+        ax.scatter3D(X_val.values[:,0],X_val.values[:,1], pred_val, c=pred_val, cmap='Blues')
+        plt.savefig(Moodel_name[i])
+        plt.show()
         #plot_roc(y_val, pred_val_probe,Moodel_name[i],fig,labels_names,i)
         # plot_roc(y_train, pred_train_probe,Moodel_name[i-5],fig,labels_names,i)
         #print('AUC socre:',roc_auc_score(y_val, pred_val))
         i = i+1
-    
-    plt.plot([0,1],[0,1],'r--')
-    plt.legend(loc='SouthEastOutside', fontsize=14)
-    plt.savefig('AUC_train.png')
-    plt.show()
 
 #if __name__ == '__main__':
     
     ## 特征筛选
-#selected_cols = features_selection()
+selected_cols = features_selection()
 #single_tree()
     ## Compare Method
 print('Compare with other methods')
