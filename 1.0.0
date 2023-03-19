@@ -1,0 +1,33 @@
+Collecting package metadata (current_repodata.json): ...working... done
+Solving environment: ...working... done
+
+## Package Plan ##
+
+  environment location: C:\Users\HP\Anaconda3\envs\tensorflow-gpu
+
+  added / updated specs:
+    - xlrd
+
+
+The following packages will be downloaded:
+
+    package                    |            build
+    ---------------------------|-----------------
+    ca-certificates-2020.1.1   |                0         125 KB
+    certifi-2020.4.5.2         |           py37_0         157 KB
+    openssl-1.1.1g             |       he774522_0         4.8 MB
+    ------------------------------------------------------------
+                                           Total:         5.1 MB
+
+The following NEW packages will be INSTALLED:
+
+  xlrd               pkgs/main/win-64::xlrd-1.2.0-py37_0
+
+The following packages will be SUPERSEDED by a higher-priority channel:
+
+  ca-certificates                                  anaconda --> pkgs/main
+  certifi                                          anaconda --> pkgs/main
+  openssl                                          anaconda --> pkgs/main
+
+
+Proceed ([y]/n)? 
